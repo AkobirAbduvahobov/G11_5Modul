@@ -69,8 +69,9 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public Task UpdateAsync(User user)
+    public async Task UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        MainContext.Users.Update(user);
+        await MainContext.SaveChangesAsync();
     }
 }

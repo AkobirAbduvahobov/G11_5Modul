@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     [HttpGet("get-all")]
     public async Task<ICollection<UserGetDto>> GetAll()
     {
-        return await UserService.GetAllAsync();
+        return await UserService.GetAllUsersAsync();
     }
 
     [HttpPost("get-summ-of-odd")]

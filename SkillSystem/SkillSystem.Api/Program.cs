@@ -1,6 +1,10 @@
 
+using Microsoft.AspNetCore.Identity.Data;
 using SkillSystem.Api.Configurations;
+using SkillSystem.Api.Endpoints;
 using SkillSystem.Api.Middlewares;
+using SkillSystem.Bll.Dtos;
+using SkillSystem.Bll.Services;
 
 namespace SkillSystem.Api;
 
@@ -43,11 +47,10 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
-
-
-
         app.MapControllers();
 
+        app.RegisterAuthEndpoints();
+        app.RegisterUserEndpoints();
         app.Run();
     }
 }

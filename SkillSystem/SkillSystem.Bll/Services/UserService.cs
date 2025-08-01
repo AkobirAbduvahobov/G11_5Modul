@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SkillSystem.Bll.Converter;
 using SkillSystem.Bll.Dtos.UserDto;
+using SkillSystem.DataAccess.Entities;
 using SkillSystem.Repository.Repositories;
 
 namespace SkillSystem.Bll.Services;
@@ -24,9 +25,10 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
-    public async Task<ICollection<UserGetDto>> GetAllAsync()
+    public async Task<ICollection<UserGetDto>> GetAllUsersAsync()
     {
         var users = await UserRepository.SelectAllAsync();
+        users = users.Where(u => u.Role == UserRole.User).ToList();
         var usersDto = users.Select(u => Mappings.ConvertToUserGetDto(u)).ToList();
         return usersDto;
     }
@@ -46,5 +48,17 @@ public class UserService : IUserService
         //Logger.LogInformation("User created successfully with ID: {UserId}", userId);
 
         return userId;
+    }
+
+    public async Task UpdateRoleAsync(long userId, UserRoleDto userRoleDto)
+    {
+        var user = await UserRepository.SelectByIdAsync(userId);
+        if(user == null)
+        {
+            throw new ArgumentException("User not found");
+        }
+
+        user.Role = (UserRole)userRoleDto;
+        await UserRepository.UpdateAsync(user);
     }
 }
